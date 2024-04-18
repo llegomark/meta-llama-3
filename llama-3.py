@@ -34,8 +34,10 @@ def chat_with_llama(messages):
                 if chunk == "[DONE]":
                     break
                 try:
-                    data = json.loads(chunk.strip().split("data: ")[1])
-                    yield data["response"]
+                    chunk_parts = chunk.strip().split("data: ")
+                    if len(chunk_parts) == 2:
+                        data = json.loads(chunk_parts[1])
+                        yield data["response"]
                 except (json.JSONDecodeError, KeyError):
                     continue
     else:
