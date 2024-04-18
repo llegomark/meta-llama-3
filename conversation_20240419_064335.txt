@@ -1,0 +1,121 @@
+System: You are a friendly assistant.
+User: please list the popular JavaScript sorting algorithms with code samples
+Assistant: 
+
+Here are some popular JavaScript sorting algorithms with code samples:
+
+1. **Bubble Sort**
+```javascript
+function bubbleSort(arr) {
+  let len = arr.length;
+  for (let i = 0; i < len - 1; i++) {
+    for (let j = 0; j < len - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+  return arr;
+}
+
+// Example usage:
+let arr = [64, 34, 25, 12, 22, 11, 90];
+console.log(bubbleSort(arr)); // [11, 12, 22, 25, 64,]
+```
+2. **Selection Sort**
+```javascript
+function selectionSort(arr) {
+  let len = arr.length;
+  for (let i = 0; i < len - 1; i++) {
+    let minIndex = i;
+    for (let j = i + 1; j < len; j++)      if (arr[j] < arr[minIndex]) {
+        minIndex j;
+      }
+    }
+    if (minIndex !== i) {
+      let temp = arr[minIndex];
+      arr[minIndex] = arr[i];
+      arr[i] = temp;
+    }
+  }
+  return arr;
+}
+
+// Example usage:
+let arr = [64, 34, 25, 12, , 11, 90];
+console.log(selectionSort(arr)); // [11, 12, 22, 25, 34, 64, 90]
+```
+3. **Insertion Sort**
+```javascript
+function insertionSort) {
+  let len = arr.length;
+  for (let i = 1; i < len; i++) {
+    let key = arr[i];
+ j = i1;
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      j--;
+    }
+    arr[j + 1] = key;
+  }
+  return arr;
+}
+
+// Example usage:
+let arr = [64, 34, 25, 12,22, 11, 90];
+console.log(insertionSort(arr)); // [11, 12, 22, 25, 34, 64, 90]
+```
+4. **Merge Sort**
+```javascript
+function mergeSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  let mid = Math.floor(arr.length / 2);
+  let left = arr.slice(0, mid);
+  let right = arr.slice(mid);
+  return merge(mergeSort(left), mergeSort(right));
+}
+
+function merge(left, right) {
+  let result = [];
+  while (left.length > 0 && right.length > 0) {
+    if (left[0] <= right[0]) {
+      result.push(left.shift());
+    } else {
+      result.push(right.shift());
+    }
+  }
+  return result.concat(left).(right);
+}
+
+// Example usage:
+let arr = [64, 34, 25, 12, 22, 11, 90];
+console.log(mergeSort(arr)); // [11, 12, 22, 25,  64, 90]
+```
+5. **Quick Sort**
+```javascript
+function quickSort(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+  let pivot = arr[0];
+  let less = [];
+  let greater = [];
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] <= pivot) {
+      less.push(arr[i]);
+    } else {
+      greater.push(arr[i]);
+    }
+  }
+  return quickSort(less).concat([pivot]).concat(quickSort(greater));
+}
+
+// Example usage:
+let arr = [64, 34, 25, 12, 22, 11, 90];
+console.log(quickSort(arr)); // [11, 12, 22, 25, 34, 64, 90]
+```
+Note that these are just some examples of popular sorting algorithms in JavaScript, and there other algorithms and implementations available. Additionally, it's worth noting that some of these algorithms may have a time complexity that is not suitable for very large datasets or specific use cases.
