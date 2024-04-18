@@ -1,5 +1,6 @@
 import os
 import requests
+import json
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -32,8 +33,11 @@ def chat_with_llama(messages):
                 chunk = chunk.decode("utf-8")
                 if chunk == "[DONE]":
                     break
-                data = chunk.strip().split("data: ")[1]
-                yield data
+                try:
+                    data = json.loads(chunk.strip().split("data: ")[1])
+                    yield data["response"]
+                except (json.JSONDecodeError, KeyError):
+                    continue
     else:
         print(f"Error: {response.status_code} - {response.text}")
 
@@ -54,7 +58,7 @@ def main():
         assistant_response = ""
         for response in chat_with_llama(messages):
             assistant_response += response
-            print(response, end="")
+            print(response, end="", flush=True)
         print()
 
         messages.append({"role": "assistant", "content": assistant_response})
