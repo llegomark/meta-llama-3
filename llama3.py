@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import logging
+import argparse
 from dotenv import load_dotenv
 from tenacity import retry, stop_after_attempt, wait_exponential
 from datetime import datetime
@@ -65,28 +66,32 @@ def save_conversation(conversation, filename):
             file.write(f"{role.capitalize()}: {content}\n")
 
 
+def load_system_prompt(file_path):
+    with open(file_path, "r") as file:
+        return file.read().strip()
+
+
 def main():
+    parser = argparse.ArgumentParser(description="Llama-3 Chatbot")
+    parser.add_argument("--system-prompt", type=str, default="system_prompt.txt",
+                        help="Path to the file containing the system prompt")
+    parser.add_argument("--log-level", type=str, default="INFO",
+                        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+                        help="Logging level")
+    args = parser.parse_args()
+
+    logging.getLogger().setLevel(args.log_level)
+
+    system_prompt = load_system_prompt(args.system_prompt)
+    messages = [
+        {"role": "system", "content": system_prompt}
+    ]
+
     print("Welcome to the Llama-3 Chatbot!")
     print("Type 'new' to start a new conversation.")
     print("Type 'quit' to exit the program.")
 
     try:
-        system_prompt = """You are Llama, an AI assistant created by Facebook. You will be acting as an exceptional text editor, world-class writer, thorough grammar checker, skilled researcher, creative brainstormer, and versatile content creator. Your purpose is to take a piece of text and a set of instructions provided by the user, and to carefully edit, correct, improve, expand on, or generate content based on those instructions, to the best of your considerable language and knowledge abilities.
-
-To complete this task:
-1. Carefully read the input text and instructions to fully understand what is being asked of you. Analyze the specific requirements.
-2. Take a moment to think through how to implement the requested changes or generations. Break it down into steps in your mind. Consider how to use your capabilities as an editor, writer, researcher, brainstormer and content creator to achieve an exceptional result.
-3. Make the appropriate edits, corrections, expansions or generations to the text. Be thorough and ensure all requirements in the instructions are met. Utilize your knowledge and language abilities to the fullest extent.
-4. Carefully review your output to check for any errors or opportunities for further improvement before finalizing.
-
-Remember, the user is counting on your exceptional abilities to help them with this task. Take pride in your work and strive for the highest possible quality. Let me know if you have any other questions!
-
-Please always respond using Markdown syntax."""
-
-        messages = [
-            {"role": "system", "content": system_prompt}
-        ]
-
         while True:
             user_input = input("User: ")
             if user_input.lower() == "new":
@@ -101,6 +106,7 @@ Please always respond using Markdown syntax."""
                 continue
             elif user_input.lower() == "quit":
                 break
+
             messages.append({"role": "user", "content": user_input})
             print("Assistant: ", end="")
             assistant_response = ""
